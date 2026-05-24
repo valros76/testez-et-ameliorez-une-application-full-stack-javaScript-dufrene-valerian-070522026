@@ -143,12 +143,13 @@ function SessionForm() {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
                 Session Name
               </label>
               <input
                 type="text"
                 name="name"
+                id="name"
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
@@ -157,12 +158,13 @@ function SessionForm() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label htmlFor="date" className="block text-gray-700 text-sm font-bold mb-2">
                 Date
               </label>
               <input
                 type="date"
                 name="date"
+                id="date"
                 value={formData.date}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
@@ -171,11 +173,12 @@ function SessionForm() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label htmlFor="teacherId" className="block text-gray-700 text-sm font-bold mb-2">
                 Teacher
               </label>
               <select
                 name="teacherId"
+                id="teacherId"
                 value={formData.teacherId}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
@@ -191,11 +194,12 @@ function SessionForm() {
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">
                 Description
               </label>
               <textarea
                 name="description"
+                id="description"
                 value={formData.description}
                 onChange={handleChange}
                 rows={6}
