@@ -2,19 +2,20 @@ import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../repositories/user.repository';
 import { generateToken } from '../utils/jwt.util';
 import { AppError } from '../utils/app-error';
+import { LoginSchema, RegisterSchema } from '../dto/auth.dto';
 
 export class AuthService {
   private userRepository = new UserRepository();
 
   async login(body: any) {
-    const { email, password } = body;
+    const result = LoginSchema.safeParse(body);
+    
+    if (!result.success) {
+      const firstError = result.error.issues[0].message;
+      throw new AppError(firstError, 400);
+    }
 
-    if (!email || !password) {
-      throw new AppError('Email and password are required', 400);
-    }
-    if (typeof email !== 'string' || typeof password !== 'string') {
-      throw new AppError('Email and password must be strings', 400);
-    }
+    const { email, password } = result.data;
 
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
@@ -39,14 +40,14 @@ export class AuthService {
   }
 
   async register(body: any) {
-    const { email, password, firstName, lastName } = body;
+    const result = RegisterSchema.safeParse(body);
+    
+    if (!result.success) {
+      const firstError = result.error.issues[0].message;
+      throw new AppError(firstError, 400);
+    }
 
-    if (!email || !password || !firstName || !lastName) {
-      throw new AppError('All fields are required', 400);
-    }
-    if (password.length < 8) {
-      throw new AppError('Password must be at least 8 characters', 400);
-    }
+    const { email, password, firstName, lastName } = result.data;
 
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {

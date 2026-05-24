@@ -2,6 +2,7 @@ import { SessionRepository } from '../repositories/session.repository';
 import { UserRepository } from '../repositories/user.repository';
 import { TeacherRepository } from '../repositories/teacher.repository';
 import { AppError } from '../utils/app-error';
+import { CreateSessionSchema, UpdateSessionSchema } from '../dto/session.dto';
 
 export class SessionService {
   private sessionRepository = new SessionRepository();
@@ -39,11 +40,14 @@ export class SessionService {
   }
 
   async createSession(userId: number | undefined, body: any) {
-    const { name, date, description, teacherId } = body;
-
-    if (!name || !date || !description || !teacherId) {
-      throw new AppError('All fields are required', 400);
+    const result = CreateSessionSchema.safeParse(body);
+    
+    if (!result.success) {
+      const firstError = result.error.issues[0].message;
+      throw new AppError(firstError, 400);
     }
+
+    const { name, date, description, teacherId } = result.data;
 
     const user = await this.userRepository.findById(userId || 0);
     if (!user || !user.admin) {
@@ -66,7 +70,14 @@ export class SessionService {
   }
 
   async updateSession(id: number, userId: number | undefined, body: any) {
-    const { name, date, description, teacherId } = body;
+    const result = UpdateSessionSchema.safeParse(body);
+
+    if (!result.success) {
+      const firstError = result.error.issues[0].message;
+      throw new AppError(firstError, 400);
+    }
+
+    const { name, date, description, teacherId } = result.data;
 
     const user = await this.userRepository.findById(userId || 0);
     if (!user || !user.admin) {
