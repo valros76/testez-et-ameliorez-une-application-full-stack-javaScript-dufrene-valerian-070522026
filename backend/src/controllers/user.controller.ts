@@ -1,8 +1,7 @@
 import { Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../config/prisma';
 import { AuthRequest } from '../middleware/auth.middleware';
 
-const prisma = new PrismaClient();
 
 export class UserController {
   async getById(req: AuthRequest, res: Response) {
