@@ -51,6 +51,7 @@ Une application web full-stack pour gérer les opérations d'un studio de yoga, 
 ### Profil Utilisateur
 * Profil utilisateur détaillé
 * Suppression du compte utilisateur
+* Promotion automatique en tant qu'administrateur (Uniquement en environnement de développement)
 
 ---
 
@@ -143,30 +144,22 @@ Le serveur de développement Vite lancera l'application sur http://localhost:300
 
 ---
 
-## 📈 Liste des Modifications Apportées (Refonte Frontend & Typage)
+## 📈 Liste des Modifications Apportées (Refontes Strictes)
 
+### 💻 Partie Frontend (Typage Strict)
 Afin de respecter les exigences d'un Mode Strict TypeScript (Type-Safe à 100%), une refonte majeure a été menée sur la partie Frontend pour éradiquer tous les types lâches ou implicites. Voici le détail des modifications appliquées :
 
-### 1. Élimination Radicale du Type any
-Tous les states React (useState) et les signatures de fonctions qui utilisaient explicitement ou implicitement any ont été réécrits avec des types stricts issus de ../types.
+* **Élimination Radicale du Type any :** Tous les states React (`useState`) et les signatures de fonctions qui utilisaient explicitement ou implicitement `any` ont été réécrits avec des types stricts issus de `../types` (`RegisterData`, `Session`, `SessionFormData`).
+* **Sécurisation des Événements du DOM React :** Les gestionnaires d'événements ont été typés avec précision en exploitant les types génériques de React au lieu de contourner le compilateur (`ChangeEvent`, `FormEvent`).
+* **Gestion des Gardes Contre le null et l'Asynchronisme :** Intégration systématique de vérifications conditionnelles (`if (!user?.id)`) avant le déclenchement des requêtes réseau (POST, PUT, DELETE) et isolation des fonctions de récupération de données à l’intérieur des hooks `useEffect`.
+* **Résolution des Conflits de Configuration Globale :** Résolution de l'erreur ts(2882) via l'ajout de métadonnées de modules dans `vite-env.d.ts` et correction de la surcharge défectueuse de l'interface `ViteImportMeta` dans `Profile.tsx`.
 
-* **Register.tsx :** Le state formData est désormais typé avec l'interface RegisterData.
-* **Sessions.tsx & SessionDetail.tsx :** Les listes et entités uniques utilisent désormais exclusivement le type structurel Session.
-* **SessionForm.tsx :** Création d'une interface locale dédiée SessionFormData pour contrôler les champs éditables du formulaire.
+### ⚙️ Partie Backend (Architecture en Couches & Gestion d'Erreurs)
+Afin de respecter les exigences d'une architecture logicielle robuste, scalable et conforme aux bonnes pratiques professionnelles, une refonte majeure a été menée sur la partie Backend.
 
-### 2. Sécurisation des Événements du DOM React
-Les gestionnaires d'événements ont été typés avec précision en exploitant les types génériques de React au lieu de contourner le compilateur :
-
-* handleChange dans les formulaires utilise désormais ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>.
-* handleSubmit est strictement lié à FormEvent<HTMLFormElement>.
-
-### 3. Gestion des Gardes Contre le null et l'Asynchronisme
-* Intégration systématique de vérifications conditionnelles (if (!user?.id)) avant le déclenchement des requêtes réseau (POST, PUT, DELETE) pour parer aux comportements imprévus si la session utilisateur expire.
-* Isolation des fonctions de récupération de données (fetchSession, fetchTeachers) à l’intérieur des hooks useEffect pour stabiliser le cycle de vie des composants et éviter les dépendances de rendu instables.
-
-### 4. Résolution des Conflits de Configuration Globale
-* **Erreur ts(2882) (Import CSS) :** Résolue via l'ajout de métadonnées de modules dans vite-env.d.ts.
-* **Erreur ts(2430) (Interface ViteImportMeta) :** Suppression de l'ancienne surcharge locale défectueuse dans Profile.tsx au profit de l'injection native des types clients de Vite (/// <reference types="vite/client" />), permettant l'utilisation transparente et sécurisée de import.meta.env.DEV.
+* **Centralisation de la Gestion des Erreurs :** Création de la classe `AppError` et du wrapper de fonctions `catchAsync`. Cette approche a permis de **supprimer 100% des blocs try/catch redondants** dans les contrôleurs. Toutes les exceptions sont désormais interceptées et unifiées par un `errorMiddleware` global placé en fin de cycle Express.
+* **Découpage en Architecture N-Tier (3 Couches) :** Isolation complète des responsabilités. Les contrôleurs ne contiennent plus aucune logique métier ni d'accès à la base de données. Les règles métiers (hachage, validations de données, droits d'accès) sont déportées dans la couche Services (`src/services/`) et l'accès direct à l'ORM Prisma est encapsulé dans la couche Repositories (`src/repositories/`).
+* **Typage Strict Express & Routage Moderne :** Résolution des erreurs de conversion ts(2345) sur les paramètres d'URL en forçant le typage strict (`as string`) lors de l'utilisation de `parseInt()`. Modernisation de `src/routes/index.ts` en passant les méthodes de contrôleurs par référence directe pour éliminer les fonctions fléchées incomplètes (erreurs ts(2554)).
 
 ---
 
@@ -192,6 +185,7 @@ Les gestionnaires d'événements ont été typés avec précision en exploitant 
 ### Utilisateurs
 * GET /api/user/:id - Récupérer les données d'un utilisateur (Protégé)
 * DELETE /api/user/:id - Supprimer un compte utilisateur (Protégé)
+* POST /api/user/promote-admin - S'auto-promouvoir Administrateur (Protégé - NODE_ENV=development uniquement)
 
 ---
 
