@@ -11,7 +11,6 @@ const pool = new Pool({
 
 const adapter = new PrismaPg(pool);
 
-// On exporte une instance UNIQUE de Prisma configurée avec l'adaptateur pour éviter les bugs liées à la montée de version
 export const prisma = new PrismaClient({
   adapter
 });

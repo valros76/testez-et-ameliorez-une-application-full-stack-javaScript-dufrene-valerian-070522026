@@ -7,10 +7,8 @@ dotenv.config()
 async function main() {
   console.log('Starting seed...');
 
-  // Hash password for admin user
   const hashedPassword = await bcrypt.hash('test!1234', 10);
 
-  // Create admin user
   const admin = await prisma.user.upsert({
     where: { email: 'yoga@studio.com' },
     update: {},
@@ -24,7 +22,6 @@ async function main() {
   });
   console.log('Admin user created:', admin.email);
 
-  // Create regular user
   const regularUser = await prisma.user.upsert({
     where: { email: 'user@test.com' },
     update: {},
@@ -38,7 +35,6 @@ async function main() {
   });
   console.log('Regular user created:', regularUser.email);
 
-  // Create teachers
   const teacher1 = await prisma.teacher.upsert({
     where: { id: 1 },
     update: {},
@@ -68,7 +64,6 @@ async function main() {
 
   console.log('Teachers created');
 
-  // Create sessions
   const session1 = await prisma.session.upsert({
     where: { id: 1 },
     update: {},
