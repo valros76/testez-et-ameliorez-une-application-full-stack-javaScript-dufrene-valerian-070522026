@@ -5,36 +5,49 @@ import { authService } from '../services/auth.service';
 import { Session } from '../types';
 
 function SessionDetail() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [session, setSession] = useState<any>(null);
-  const [loading, setLoading] = useState<any>(true);
-  const [error, setError] = useState<any>('');
+  
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+  
   const user = authService.getCurrentUser();
   const token = authService.getToken();
 
   useEffect(() => {
+    const fetchSession = async (): Promise<void> => {
+      if (!id) {
+        setError('Invalid session identifier');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await api.get<Session>(`/session/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setSession(response.data);
+      } catch (err: unknown) {
+        setError('Failed to load session details');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchSession();
-  }, [id]);
+  }, [id, token]);
 
-  const fetchSession = async (): Promise<any> => {
-    try {
-      setLoading(true);
-      const response = await api.get<Session>(`/session/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSession(response.data);
-    } catch (err: any) {
-      setError('Failed to load session details');
-      console.error(err);
-    } finally {
-      setLoading(false);
+  const handleParticipate = async (): Promise<void> => {
+    if (!user?.id || !id) {
+      alert('Action impossible: missing user or session identifier');
+      return;
     }
-  };
 
-  const handleParticipate = async (): Promise<any> => {
     try {
       await api.post(
         `/session/${id}/participate/${user.id}`,
@@ -45,28 +58,42 @@ function SessionDetail() {
           },
         }
       );
-      fetchSession();
-    } catch (err: any) {
+
+      const response = await api.get<Session>(`/session/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSession(response.data);
+    } catch (err: unknown) {
       alert('Failed to join session');
       console.error(err);
     }
   };
 
-  const handleUnparticipate = async (): Promise<any> => {
+  const handleUnparticipate = async (): Promise<void> => {
+    if (!user?.id || !id) {
+      alert('Action impossible: missing user or session identifier');
+      return;
+    }
+
     try {
       await api.delete(`/session/${id}/participate/${user.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      fetchSession();
-    } catch (err: any) {
+      const response = await api.get<Session>(`/session/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSession(response.data);
+    } catch (err: unknown) {
       alert('Failed to leave session');
       console.error(err);
     }
   };
 
-  const handleDelete = async (): Promise<any> => {
+  const handleDelete = async (): Promise<void> => {
+    if (!id) return;
+    
     if (!window.confirm('Are you sure you want to delete this session?')) {
       return;
     }
@@ -78,7 +105,7 @@ function SessionDetail() {
         },
       });
       navigate('/sessions');
-    } catch (err: any) {
+    } catch (err: unknown) {
       alert('Failed to delete session');
       console.error(err);
     }
@@ -102,7 +129,7 @@ function SessionDetail() {
     );
   }
 
-  const isParticipating = session.users.includes(user.id);
+  const isParticipating = user?.id ? session.users.includes(user.id) : false;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
@@ -117,19 +144,23 @@ function SessionDetail() {
             <div className="space-y-2 text-gray-600">
               <p>
                 <strong>Date:</strong>{' '}
-                {new Date(session.date).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                {session.date ? (
+                  new Date(session.date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })
+                ) : (
+                  'N/A'
+                )}
               </p>
               <p>
-                <strong>Teacher:</strong> {session.teacher.firstName}{' '}
-                {session.teacher.lastName}
+                <strong>Teacher:</strong> {session.teacher?.firstName}{' '}
+                {session.teacher?.lastName}
               </p>
               <p>
-                <strong>Participants:</strong> {session.users.length}
+                <strong>Participants:</strong> {session.users?.length || 0}
               </p>
             </div>
           </div>
@@ -144,7 +175,7 @@ function SessionDetail() {
           </div>
 
           <div className="flex space-x-4">
-            {user.admin ? (
+            {user?.admin ? (
               <>
                 <button
                   onClick={() => navigate(`/sessions/edit/${id}`)}

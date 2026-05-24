@@ -5,34 +5,35 @@ import { authService } from '../services/auth.service';
 import { Session } from '../types';
 
 function Sessions() {
-  const [sessions, setSessions] = useState<any>([]);
-  const [loading, setLoading] = useState<any>(true);
-  const [error, setError] = useState<any>('');
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+  
   const user = authService.getCurrentUser();
   const token = authService.getToken();
 
   useEffect(() => {
+    const fetchSessions = async (): Promise<void> => {
+      try {
+        setLoading(true);
+        const response = await api.get<Session[]>('/session', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setSessions(response.data);
+      } catch (err: unknown) {
+        setError('Failed to load sessions');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchSessions();
-  }, []);
+  }, [token]);
 
-  const fetchSessions = async (): Promise<any> => {
-    try {
-      setLoading(true);
-      const response = await api.get<Session[]>('/session', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSessions(response.data);
-    } catch (err: any) {
-      setError('Failed to load sessions');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (sessionId: any): Promise<any> => {
+  const handleDelete = async (sessionId: number | string): Promise<void> => {
     if (!window.confirm('Are you sure you want to delete this session?')) {
       return;
     }
@@ -43,8 +44,12 @@ function Sessions() {
           Authorization: `Bearer ${token}`,
         },
       });
-      fetchSessions();
-    } catch (err: any) {
+
+      const response = await api.get<Session[]>('/session', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSessions(response.data);
+    } catch (err: unknown) {
       alert('Failed to delete session');
       console.error(err);
     }
@@ -89,19 +94,19 @@ function Sessions() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sessions.map((session: any) => (
+            {sessions.map((session: Session) => (
               <div key={session.id} className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-2">
                   {session.name}
                 </h3>
                 <p className="text-gray-600 mb-2">
-                  Date: {new Date(session.date).toLocaleDateString()}
+                  Date: {session.date ? new Date(session.date).toLocaleDateString() : 'N/A'}
                 </p>
                 <p className="text-gray-600 mb-2">
-                  Teacher: {session.teacher.firstName} {session.teacher.lastName}
+                  Teacher: {session.teacher?.firstName} {session.teacher?.lastName}
                 </p>
                 <p className="text-gray-600 mb-4">
-                  Participants: {session.users.length}
+                  Participants: {session.users?.length || 0}
                 </p>
                 <p className="text-gray-700 mb-4 line-clamp-3">
                   {session.description}

@@ -1,26 +1,34 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../services/auth.service';
+import { RegisterData } from '../types';
+
+interface AxiosErrorResponse {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 function Register() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<RegisterData>({
     email: '',
     password: '',
     firstName: '',
     lastName: '',
   });
-  const [error, setError] = useState<any>('');
-  const [loading, setLoading] = useState<any>(false);
-
-  const handleChange = (e: any): any => {
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e: any): Promise<any> => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -28,8 +36,9 @@ function Register() {
     try {
       await authService.register(formData);
       navigate('/sessions');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed');
+    } catch (err: unknown) {
+      const axiosError = err as AxiosErrorResponse;
+      setError(axiosError.response?.data?.message || 'Registration failed');
     } finally {
       setLoading(false);
     }

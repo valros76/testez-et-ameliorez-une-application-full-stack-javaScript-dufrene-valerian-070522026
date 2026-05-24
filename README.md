@@ -1,214 +1,232 @@
-# Yoga Studio Management System
+# 🧘 Système de Gestion Yoga Studio
 
-A full-stack web application for managing yoga studio operations, including session scheduling, teacher management, and user registrations.
+Une application web full-stack pour gérer les opérations d'un studio de yoga, incluant la planification des sessions, la gestion des professeurs et l'inscription des utilisateurs.
 
-## Tech Stack
+---
+
+## 🛠️ Stack Technique
 
 ### Backend
-- Node.js 22 LTS
-- Express.js 4.x
-- TypeScript 5.4+ (Strict Mode)
-- Prisma ORM
-- PostgreSQL 16
-- Zod (validation)
-- JWT (authentication)
-- bcrypt (password hashing)
+* **Node.js 22 LTS**
+* **Express.js 4.x**
+* **TypeScript 5.4+** (Mode Strict)
+* **Prisma ORM**
+* **PostgreSQL 16**
+* **Zod** (validation)
+* **JWT** (authentification)
+* **bcrypt** (hachage des mots de passe)
 
 ### Frontend
-- React 19 (Hooks only)
-- TypeScript 5.9+ (Strict Mode)
-- Vite 7.x
-- TailwindCSS 4.x
-- React Router 6.x
-- Axios
+* **React 19** (Hooks uniquement)
+* **TypeScript 5.9+** (Mode Strict)
+* **Vite 7.x**
+* **TailwindCSS 4.x**
+* **React Router 6.x**
+* **Axios**
 
 ### Infrastructure
-- Docker + Docker Compose
-- PostgreSQL container
+* **Docker + Docker Compose**
+* Conteneur PostgreSQL
 
-## Features
+---
 
-### Authentication
-- User registration
-- User login with JWT tokens
+## ✨ Fonctionnalités
 
-### Sessions Management
-- List all yoga sessions
-- View session details
-- Create new sessions (admin only)
-- Update sessions (admin only)
-- Delete sessions (admin only)
-- Join/leave sessions (regular users)
+### Authentification
+* Inscription des utilisateurs
+* Connexion des utilisateurs avec jetons JWT
 
-### Teachers
-- View list of teachers
-- View teacher details
+### Gestion des Sessions
+* Liste de toutes les sessions de yoga
+* Affichage des détails d'une session
+* Création de nouvelles sessions (**Admin uniquement**)
+* Mise à jour des sessions (**Admin uniquement**)
+* Suppression des sessions (**Admin uniquement**)
+* Rejoindre/quitter une session (Utilisateurs standards)
 
-### User Profile
-- View user profile
-- Delete user account
+### Professeurs
+* Affichage de la liste des professeurs
+* Affichage des détails d'un professeur
 
-## Prerequisites
+### Profil Utilisateur
+* Profil utilisateur détaillé
+* Suppression du compte utilisateur
 
-- Node.js 22 LTS or higher
-- Docker and Docker Compose
-- npm or yarn
+---
 
-## Installation
+## 📋 Prérequis
 
-### 1. Clone the repository
+* Node.js 22 LTS ou supérieur
+* Docker et Docker Compose
+* npm ou yarn
 
-```bash
+---
+
+## 🚀 Installation et Configuration au Lancement
+
+Suis ces étapes pour configurer et lancer le projet localement en prenant en compte les récentes optimisations et l'environnement strict de TypeScript.
+
+### 1. Cloner le dépôt et accéder au dossier
+git clone <url-du-depot>
 cd p4-dfsjs-starter
-```
 
-### 2. Install Backend Dependencies
+### 2. Configurer les variables d'environnement (Backend)
+Crée un fichier .env dans le répertoire backend :
 
-```bash
 cd backend
-npm install
-```
-
-### 3. Install Frontend Dependencies
-
-```bash
-cd ../frontend
-npm install
-```
-
-### 4. Set up Environment Variables
-
-Create a `.env` file in the `backend` directory:
-
-```bash
-cd ../backend
 cp .env.example .env
-```
 
-The default configuration should work with Docker Compose:
+La configuration par défaut est préconfigurée pour fonctionner avec Docker Compose :
 
-```env
 DATABASE_URL="postgresql://yogauser:yogapass@localhost:5432/yogastudio"
 JWT_SECRET="your-secret-key-change-me-in-production"
 PORT=8080
 NODE_ENV=development
-```
 
-### 5. Start PostgreSQL with Docker
+### 3. Installer les dépendances du Backend
+npm install
 
-From the project root:
+### 4. Installer et configurer les dépendances du Frontend
+Bascule dans le dossier frontend, installe les modules et assure-toi que l'environnement global TypeScript est correctement configuré.
 
-```bash
+cd ../frontend
+npm install
+
+⚠️ Ajustement Suite aux Modifications : Pour éviter l'erreur de build ts(2882) liée aux imports de feuilles de style comme index.css ou aux variables d'environnement de Vite, un fichier de déclarations globales est requis.
+
+Vérifie ou crée le fichier src/vite-env.d.ts avec le contenu suivant :
+
+/// <reference types="vite/client" />
+declare module '*.css';
+
+---
+
+## 🏗️ Initialisation de la Base de Données
+
+Depuis la racine du projet, démarre l'instance PostgreSQL via Docker :
+
 docker-compose up -d
-```
 
-This will start a PostgreSQL container on port 5432.
+Accède au dossier backend pour exécuter les migrations Prisma :
 
-### 6. Run Database Migrations
-
-```bash
 cd backend
 npm run prisma:migrate
-```
 
-### 7. Seed the Database
+Injecte les données de test (Seed) dans la base :
 
-```bash
 npm run prisma:seed
-```
 
-This will create:
-- 1 admin user: `yoga@studio.com` / `test!1234`
-- 1 regular user: `user@test.com` / `test!1234`
-- 3 teachers
-- 4 yoga sessions
+Ceci génère automatiquement : 1 compte administrateur, 1 compte utilisateur standard, 3 professeurs et 4 sessions.
 
-## Running the Application
+---
 
-### Start the Backend (Terminal 1)
+## 💻 Exécution de l'Application
 
-```bash
+### Démarrer le Backend (Terminal 1)
 cd backend
 npm run dev
-```
 
-The API will run on `http://localhost:8080`
+L'API sera accessible sur http://localhost:8080
 
-### Start the Frontend (Terminal 2)
-
-```bash
+### Démarrer le Frontend (Terminal 2)
 cd frontend
 npm run dev
-```
 
-The frontend will run on `http://localhost:3000`
+Le serveur de développement Vite lancera l'application sur http://localhost:3000
 
-## Default Credentials
+---
 
-**Admin User:**
-- Email: `yoga@studio.com`
-- Password: `test!1234`
+## 🔐 Identifiants par Défaut
 
-**Regular User:**
-- Email: `user@test.com`
-- Password: `test!1234`
+* **Compte Administrateur :** yoga@studio.com / test!1234
+* **Compte Utilisateur Standard :** user@test.com / test!1234
 
-## API Endpoints
+---
 
-### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login and get JWT token
+## 📈 Liste des Modifications Apportées (Refonte Frontend & Typage)
+
+Afin de respecter les exigences d'un Mode Strict TypeScript (Type-Safe à 100%), une refonte majeure a été menée sur la partie Frontend pour éradiquer tous les types lâches ou implicites. Voici le détail des modifications appliquées :
+
+### 1. Élimination Radicale du Type any
+Tous les states React (useState) et les signatures de fonctions qui utilisaient explicitement ou implicitement any ont été réécrits avec des types stricts issus de ../types.
+
+* **Register.tsx :** Le state formData est désormais typé avec l'interface RegisterData.
+* **Sessions.tsx & SessionDetail.tsx :** Les listes et entités uniques utilisent désormais exclusivement le type structurel Session.
+* **SessionForm.tsx :** Création d'une interface locale dédiée SessionFormData pour contrôler les champs éditables du formulaire.
+
+### 2. Sécurisation des Événements du DOM React
+Les gestionnaires d'événements ont été typés avec précision en exploitant les types génériques de React au lieu de contourner le compilateur :
+
+* handleChange dans les formulaires utilise désormais ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>.
+* handleSubmit est strictement lié à FormEvent<HTMLFormElement>.
+
+### 3. Gestion des Gardes Contre le null et l'Asynchronisme
+* Intégration systématique de vérifications conditionnelles (if (!user?.id)) avant le déclenchement des requêtes réseau (POST, PUT, DELETE) pour parer aux comportements imprévus si la session utilisateur expire.
+* Isolation des fonctions de récupération de données (fetchSession, fetchTeachers) à l’intérieur des hooks useEffect pour stabiliser le cycle de vie des composants et éviter les dépendances de rendu instables.
+
+### 4. Résolution des Conflits de Configuration Globale
+* **Erreur ts(2882) (Import CSS) :** Résolue via l'ajout de métadonnées de modules dans vite-env.d.ts.
+* **Erreur ts(2430) (Interface ViteImportMeta) :** Suppression de l'ancienne surcharge locale défectueuse dans Profile.tsx au profit de l'injection native des types clients de Vite (/// <reference types="vite/client" />), permettant l'utilisation transparente et sécurisée de import.meta.env.DEV.
+
+---
+
+## 🌐 Points d'Accès API (Endpoints)
+
+### Authentification
+* POST /api/auth/register - Inscrire un nouvel utilisateur
+* POST /api/auth/login - Se connecter et obtenir le jeton JWT
 
 ### Sessions
-- `GET /api/session` - Get all sessions (protected)
-- `GET /api/session/:id` - Get session by ID (protected)
-- `POST /api/session` - Create session (admin only)
-- `PUT /api/session/:id` - Update session (admin only)
-- `DELETE /api/session/:id` - Delete session (admin only)
-- `POST /api/session/:id/participate/:userId` - Join session (protected)
-- `DELETE /api/session/:id/participate/:userId` - Leave session (protected)
+* GET /api/session - Récupérer toutes les sessions (Protégé)
+* GET /api/session/:id - Récupérer une session par son ID (Protégé)
+* POST /api/session - Créer une session (Admin uniquement)
+* PUT /api/session/:id - Modifier une session (Admin uniquement)
+* DELETE /api/session/:id - Supprimer une session (Admin uniquement)
+* POST /api/session/:id/participate/:userId - Rejoindre une session (Protégé)
+* DELETE /api/session/:id/participate/:userId - Quitter une session (Protégé)
 
-### Teachers
-- `GET /api/teacher` - Get all teachers (protected)
-- `GET /api/teacher/:id` - Get teacher by ID (protected)
+### Professeurs
+* GET /api/teacher - Récupérer tous les professeurs (Protégé)
+* GET /api/teacher/:id - Récupérer un professeur par son ID (Protégé)
 
-### Users
-- `GET /api/user/:id` - Get user by ID (protected)
-- `DELETE /api/user/:id` - Delete user account (protected)
+### Utilisateurs
+* GET /api/user/:id - Récupérer les données d'un utilisateur (Protégé)
+* DELETE /api/user/:id - Supprimer un compte utilisateur (Protégé)
 
-## Database Schema
+---
 
-```prisma
+## 🗃️ Schéma de la Base de Données (Prisma)
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int                    @id @default(autoincrement())
+  email     String                 @unique
   firstName String
   lastName  String
   password  String
-  admin     Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  admin     Boolean                @default(false)
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
   sessions  SessionParticipation[]
 }
 
 model Teacher {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   firstName String
   lastName  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   sessions  Session[]
 }
 
 model Session {
-  id          Int       @id @default(autoincrement())
-  name        String
-  date        DateTime
-  description String
-  teacherId   Int
-  teacher     Teacher   @relation(fields: [teacherId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id           Int                    @id @default(autoincrement())
+  name         String
+  date         DateTime
+  description  String
+  teacherId    Int
+  teacher      Teacher                @relation(fields: [teacherId], references: [id])
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
   participants SessionParticipation[]
 }
 
@@ -220,111 +238,67 @@ model SessionParticipation {
 
   @@id([sessionId, userId])
 }
-```
 
-## Development Scripts
+---
+
+## ⚙️ Scripts de Développement
 
 ### Backend
-
-```bash
-npm run dev          # Start development server with nodemon
-npm run build        # Build TypeScript to JavaScript
-npm start            # Start production server
-npm run prisma:generate  # Generate Prisma client
-npm run prisma:migrate   # Run database migrations
-npm run prisma:seed      # Seed the database
-npm run prisma:studio    # Open Prisma Studio
-```
+* `npm run dev` : Lance le serveur de dev avec nodemon
+* `npm run build` : Compile le TypeScript en JavaScript
+* `npm start` : Démarre le serveur de production
+* `npm run prisma:generate` : Génère le client Prisma
+* `npm run prisma:migrate` : Exécute les migrations de base de données
+* `npm run prisma:seed` : Injecte les données initiales
+* `npm run prisma:studio` : Ouvre l'interface graphique Prisma Studio
 
 ### Frontend
+* `npm run dev` : Lance le serveur de développement Vite
+* `npm run build` : Compile l'application pour la production
+* `npm run preview` : Prévisualise le build de production localement
 
-```bash
-npm run dev          # Start Vite development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-```
+---
 
-## Project Structure
+## 🧪 Tests
 
-```
-p4-dfsjs-starter/
-├── backend/
-│   ├── src/
-│   │   ├── controllers/      # Request handlers
-│   │   ├── middleware/       # Auth middleware
-│   │   ├── dto/              # Zod validation schemas
-│   │   ├── utils/            # JWT utilities
-│   │   ├── routes/           # API routes
-│   │   └── app.ts            # Express app setup
-│   ├── prisma/
-│   │   ├── schema.prisma     # Database schema
-│   │   └── seed.ts           # Database seeding
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── .env
-├── frontend/
-│   ├── src/
-│   │   ├── pages/            # React page components
-│   │   ├── components/       # Reusable components
-│   │   ├── services/         # API services
-│   │   ├── types/            # TypeScript types
-│   │   ├── App.tsx
-│   │   └── main.tsx
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── tailwind.config.js
-├── docker-compose.yml
-└── README.md
-```
+Le projet intègre une suite de tests automatisés :
 
-## Testing
+* **Tests Unitaires :** Validation des composants isolés et des utilitaires.
+* **Tests d'Intégration :** Validation du comportement des endpoints de l'API.
+* **Tests End-to-End (E2E) :** Validation des parcours utilisateurs critiques.
 
-The project supports comprehensive testing with the following frameworks:
-- **Unit tests**: For testing individual components and utilities
-- **Integration tests**: For testing API endpoints
-- **End-to-end tests**: For testing critical user flows
+Exécute les scripts de tests correspondants à l'aide de la commande `npm run test` dans chaque dossier respectif.
 
-Run tests with the appropriate npm scripts in each directory.
+---
 
-## Troubleshooting
+## 🔍 Dépannage (Troubleshooting)
 
-### Database connection issues
-```bash
-# Check if PostgreSQL is running
+### Problème de connexion à la base de données
+# Vérifier si le conteneur PostgreSQL tourne
 docker ps
 
-# Restart PostgreSQL
+# Redémarrer le conteneur PostgreSQL
 docker-compose restart postgres
 
-# View logs
+# Consulter les fichiers de logs du conteneur
 docker-compose logs postgres
-```
 
-### Port already in use
-```bash
-# Check what's using port 8080
+### Ports réseau déjà utilisés (8080 ou 3000)
+# Identifier le processus qui occupe le port 8080
 lsof -i :8080
 
-# Check what's using port 3000
-lsof -i :3000
-
-# Kill the process if needed
+# Tuer le processus problématique
 kill -9 <PID>
-```
 
-### Prisma issues
-```bash
-# Reset database (WARNING: deletes all data)
+### Problèmes liés à Prisma
+# Réinitialiser entièrement la base (Attention : supprime toutes les données !)
 npx prisma migrate reset
 
-# Regenerate Prisma client
+# Regénérer proprement le client Prisma
 npx prisma generate
-```
 
-## Contributing
+---
 
-Please follow the existing code style and ensure all tests pass before submitting changes.
+## 📝 Licence
 
-## License
-
-MIT
+Ce projet est sous licence MIT.
