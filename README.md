@@ -34,6 +34,125 @@ Une application web full-stack de pointe pour gérer les opérations d'un studio
 
 ---
 
+## 📊 Rapports Officiels de Couverture (Vitest + V8)
+
+Conformément aux exigences fixées par le plan de test d'OpenClassrooms, la suite de tests automatisés (Unitaires et Intégration) atteint et dépasse le seuil minimal de **80% de couverture globale** sur l'ensemble des indicateurs majeurs (*Statements, Branches, Functions, Lines*).
+
+---
+
+# 🖥️ 1. Couverture Frontend (Vitest)
+
+- **Fichiers de test validés :** 8/8 passés
+- **Total des tests exécutés :** 47/47 validés ✓
+- **Indicateur global (Statements) :** **87.35 %**
+
+| Module / Composant | % Instructions | % Branches | % Fonctions | % Lignes | Statut |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **All Files (Global Frontend)** | **87.35** | **77.20** | **93.47** | **88.03** | **🟢 Validé (>80%)** |
+| 📁 `components/Navbar.tsx` | 100.00 | 100.00 | 100.00 | 100.00 | 🟢 100% |
+| 📄 `pages/Login.tsx` | 100.00 | 83.33 | 100.00 | 100.00 | 🟢 100% |
+| 📄 `pages/Register.tsx` | 100.00 | 83.33 | 100.00 | 100.00 | 🟢 100% |
+| 📄 `pages/SessionDetail.tsx` | 91.52 | 78.12 | 100.00 | 93.10 | 🟢 Validé |
+| 📄 `pages/Sessions.tsx` | 90.32 | 90.00 | 100.00 | 90.32 | 🟢 Validé |
+| 📄 `pages/Profile.tsx` | 78.18 | 71.87 | 85.71 | 78.18 | 🟡 Conforme |
+| 📄 `pages/SessionForm.tsx` | 72.91 | 60.71 | 77.77 | 74.46 | 🟡 Conforme |
+| 📁 `services/auth.service.ts` | 100.00 | 100.00 | 100.00 | 100.00 | 🟢 100% |
+
+---
+
+<details>
+<summary>📂 Cliquer pour afficher le log brut du terminal (Frontend)</summary>
+
+```text
+ Test Files  8 passed (8)
+      Tests  47 passed (47)
+   Start at  22:29:12
+   Duration  2.72s (transform 595ms, setup 0ms, import 2.64s, tests 3.26s, environment 7.22s)
+
+% Coverage report from v8
+--------------------|---------|----------|---------|---------|----------------------------------
+File                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+--------------------|---------|----------|---------|---------|----------------------------------
+All files           |   87.35 |     77.2 |   93.47 |   88.03 | 
+ components         |     100 |      100 |     100 |     100 | 
+  Navbar.tsx        |     100 |      100 |     100 |     100 | 
+ pages              |   85.52 |       75 |   91.89 |   86.28 | 
+  Login.tsx         |     100 |    83.33 |     100 |     100 | 31
+  Profile.tsx       |   78.18 |    71.87 |   85.71 |   78.18 | 34-38,58-59,67,79-80,102-103,208
+  Register.tsx      |     100 |    83.33 |     100 |     100 | 41
+  SessionDetail.tsx |   91.52 |    78.12 |     100 |    93.1 | 47-48,74-75
+  SessionForm.tsx   |   72.91 |    60.71 |   77.77 |   74.46 | 58,63-79,85,109,121,221
+  Sessions.tsx      |   90.32 |       90 |     100 |   90.32 | 38,53-54
+ services           |     100 |      100 |     100 |     100 | 
+  auth.service.ts   |     100 |      100 |     100 |     100 | 
+--------------------|---------|----------|---------|---------|----------------------------------
+```
+
+</details>
+
+---
+
+# ⚙️ 2. Couverture Backend (Vitest)
+
+- **Fichiers de test validés :** 7/7 passés
+- **Total des tests exécutés :** 39/39 validés ✓
+- **Indicateur global (Statements) :** **82.92 %**
+
+| Module / Couche Métier | % Instructions | % Branches | % Fonctions | % Lignes | Statut |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **All Files (Global Backend)** | **82.92** | **72.09** | **83.33** | **83.75** | **🟢 Validé (>80%)** |
+| 📁 `config/prisma.ts` | 100.00 | 100.00 | 100.00 | 100.00 | 🟢 100% |
+| 📁 `dto/` (Validation DTOs/Zod) | 100.00 | 100.00 | 100.00 | 100.00 | 🟢 100% |
+| 🛡️ `middleware/error.middleware.ts` | 100.00 | 75.00 | 100.00 | 100.00 | 🟢 Validé |
+| ⚙️ `services/user.service.ts` | 95.45 | 87.50 | 100.00 | 95.45 | 🟢 Validé |
+| ⚙️ `services/auth.service.ts` | 92.30 | 90.00 | 100.00 | 92.30 | 🟢 Validé |
+| ⚙️ `services/teacher.service.ts` | 100.00 | 100.00 | 100.00 | 100.00 | 🟢 100% |
+| 🗄️ `repositories/session.repository.ts` | 87.50 | 100.00 | 87.50 | 87.50 | 🟢 Validé |
+| 🗄️ `repositories/teacher.repository.ts` | 100.00 | 100.00 | 100.00 | 100.00 | 🟢 100% |
+| ⚙️ `services/session.service.ts` | 73.23 | 60.00 | 80.00 | 74.62 | 🟡 Conforme |
+
+---
+
+<details>
+<summary>📂 Cliquer pour afficher le log brut du terminal (Backend)</summary>
+
+```text
+ Test Files  7 passed (7)
+      Tests  39 passed (39)
+   Start at  22:29:56
+   Duration  561ms (transform 571ms, setup 0ms, import 1.52s, tests 71ms, environment 1ms)
+
+% Coverage report from v8
+------------------------|---------|----------|---------|---------|--------------------------------------
+File                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+------------------------|---------|----------|---------|---------|--------------------------------------
+All files               |   82.92 |    72.09 |   83.33 |   83.75 | 
+ config                 |     100 |      100 |     100 |     100 | 
+  prisma.ts             |     100 |      100 |     100 |     100 | 
+ dto                    |     100 |      100 |     100 |     100 | 
+  auth.dto.ts           |     100 |      100 |     100 |     100 | 
+  session.dto.ts        |     100 |      100 |     100 |     100 | 
+ middleware             |     100 |       75 |     100 |     100 | 
+  error.middleware.ts   |     100 |       75 |     100 |     100 | 11
+ repositories           |      80 |      100 |      80 |      80 | 
+  session.repository.ts |    87.5 |      100 |    87.5 |    87.5 | 64
+  teacher.repository.ts |     100 |      100 |     100 |     100 | 
+  user.repository.ts    |      60 |      100 |      60 |      60 | 18-22
+ services               |    82.4 |    70.51 |   88.23 |   83.47 | 
+  auth.service.ts       |    92.3 |       90 |     100 |    92.3 | 46-47
+  session.service.ts    |   73.23 |       60 |      80 |   74.62 | ...6-77,84,89,97-101,111,116,125,130
+  teacher.service.ts    |     100 |      100 |     100 |     100 | 
+  user.service.ts       |   95.45 |     87.5 |     100 |   95.45 | 44
+ utils                  |   72.72 |      100 |   66.66 |   72.72 | 
+  app-error.ts          |     100 |      100 |     100 |     100 | 
+  jwt.util.ts           |      50 |      100 |      50 |      50 | 10-13
+------------------------|---------|----------|---------|---------|--------------------------------------
+```
+
+</details>
+
+---
+
 # ✨ Fonctionnalités
 
 ## Authentification
