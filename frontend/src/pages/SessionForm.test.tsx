@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router-dom";
@@ -25,15 +25,6 @@ describe("SessionForm Component (UI Tests)", () => {
     { id: 1, firstName: "John", lastName: "Doe", createdAt: "", updatedAt: "" },
     { id: 2, firstName: "Jane", lastName: "Smith", createdAt: "", updatedAt: "" },
   ];
-
-  const mockSession = {
-    id: 5,
-    name: "Ashtanga Basics",
-    date: "2026-08-20T00:00:00.000Z",
-    description: "Introduction to Ashtanga primary series.",
-    teacher: { id: 2, firstName: "Jane", lastName: "Smith" },
-    users: [],
-  };
 
   beforeEach(() => {
     vi.clearAllMocks();

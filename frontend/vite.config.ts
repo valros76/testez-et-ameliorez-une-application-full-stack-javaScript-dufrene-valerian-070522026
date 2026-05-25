@@ -16,6 +16,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    silent: true,
     onConsoleLog(log) {
       if (log.includes('React Router Future Flag Warning')) {
         return false;
